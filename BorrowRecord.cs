@@ -9,11 +9,10 @@ using System.Threading.Tasks;
     {
         public class BorrowRecord
         {
-            public Member Member { get; set; }
-            public Book Book { get; set; }
+            public Member? Member { get; set; }
+            public Book? Book { get; set; }
             public DateTime BorrowDate { get; set; }
             public DateTime DueDate { get; set; }
             public bool IsReturned { get; set; }
         }
     }
-}

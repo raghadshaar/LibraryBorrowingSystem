@@ -20,7 +20,8 @@
                 Console.WriteLine("5 - Return Book");
                 Console.WriteLine("6 - View Available Books");
                 Console.WriteLine("7 - View Borrow Records");
-                Console.WriteLine("8 - Exit");
+                Console.WriteLine("8 - Search Books");
+                Console.WriteLine("9 - Exit");
                 Console.Write("Choose option: ");
 
                 string? choice = Console.ReadLine();
@@ -56,6 +57,10 @@
                         break;
 
                     case "8":
+                        SearchBooks();
+                        break;
+
+                    case "9":
                         running = false;
                         Console.WriteLine("Goodbye!");
                         break;
@@ -79,8 +84,14 @@
         static void AddBook(bool isPhysical)
         {
             Console.Write("Enter id: ");
-            int id = int.Parse(Console.ReadLine()!);
 
+            int id;
+            bool isTrue = int.TryParse(Console.ReadLine()!, out id);
+            if (!isTrue)
+            {
+                Console.Write("Book Id must be integer");
+                return;
+            }
             Console.Write("Enter title: ");
             string? title = Console.ReadLine();
 
@@ -106,8 +117,14 @@
         static void RegisterMember()
         {
             Console.Write("Enter member id: ");
-            int id = int.Parse(Console.ReadLine()!);
 
+            int id;
+          bool isTrue = int.TryParse(Console.ReadLine()!,out  id);
+            if (!isTrue)
+            {
+                Console.Write("Your member Id must be integer");
+                return;
+            }
             Console.Write("Enter name: ");
             string? name = Console.ReadLine();
 
@@ -129,11 +146,25 @@
         static void BorrowBook()
         {
             Console.Write("Enter member id: ");
-            int memberId = int.Parse(Console.ReadLine()!);
+            int memberId;
+
+       
+            bool isTrue = int.TryParse(Console.ReadLine()!, out memberId);
+            if (!isTrue)
+            {
+                Console.Write("Invlaid member Id");
+                return;
+            }
 
             Console.Write("Enter book id: ");
-            int bookId = int.Parse(Console.ReadLine()!);
+            int bookId;
 
+            bool isValid = int.TryParse(Console.ReadLine()!, out bookId);
+            if (!isValid)
+            {
+                Console.Write("Invalid book Id");
+                return;
+            }
             bool result = library.BorrowBook(memberId, bookId);
 
             Console.WriteLine(result
@@ -144,10 +175,25 @@
         static void ReturnBook()
         {
             Console.Write("Enter member id: ");
-            int memberId = int.Parse(Console.ReadLine()!);
+            int memberId;
+
+
+            bool isTrue = int.TryParse(Console.ReadLine()!, out memberId);
+            if (!isTrue)
+            {
+                Console.Write("Invlaid member Id");
+                return;
+            }
 
             Console.Write("Enter book id: ");
-            int bookId = int.Parse(Console.ReadLine()!);
+            int bookId;
+
+            bool isValid = int.TryParse(Console.ReadLine()!, out bookId);
+            if (!isValid)
+            {
+                Console.Write("Invalid book Id");
+                return;
+            }
 
             bool result = library.ReturnBook(memberId, bookId);
 
@@ -184,8 +230,90 @@
 
             foreach (var record in records)
             {
-                Console.WriteLine($"{record.Member.Name} borrowed {record.Book.Title} | Due: {record.DueDate:d} | Returned: {record.IsReturned}");
+                Console.WriteLine($"{record.Member?.Name} borrowed {record.Book?.Title} | Due: {record.DueDate:d} | Returned: {record.IsReturned}");
             }
+        }
+        static void SearchBooks()
+        {
+            Console.WriteLine("\n===== Search Books =====");
+            Console.WriteLine("1 - Search by Title");
+            Console.WriteLine("2 - Search by Author");
+            Console.WriteLine("3 - Search by ISBN");
+            Console.Write("Choose option: ");
+
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Enter title: ");
+                    string? title = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(title))
+                    {
+                        Console.WriteLine("Title cannot be empty.");
+                        return;
+                    }
+
+                    var booksByTitle = library.SearchByTitle(title);
+                    PrintBooks(booksByTitle);
+                    break;
+
+                case "2":
+                    Console.Write("Enter author: ");
+                    string? author = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(author))
+                    {
+                        Console.WriteLine("Author cannot be empty.");
+                        return;
+                    }
+
+                    var booksByAuthor = library.SearchByAuthor(author);
+                    PrintBooks(booksByAuthor);
+                    break;
+
+                case "3":
+                    Console.Write("Enter ISBN: ");
+                    string? isbn = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(isbn))
+                    {
+                        Console.WriteLine("ISBN cannot be empty.");
+                        return;
+                    }
+
+                    Book? book = library.SearchByISBN(isbn);
+
+                    if (book == null)
+                        Console.WriteLine("No book found.");
+                    else
+                        PrintBook(book);
+
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid search option.");
+                    break;
+            }
+        }
+        static void PrintBooks(List<Book> books)
+        {
+            if (!books.Any())
+            {
+                Console.WriteLine("No books found.");
+                return;
+            }
+
+            foreach (var book in books)
+            {
+                PrintBook(book);
+            }
+        }
+
+        static void PrintBook(Book book)
+        {
+            Console.WriteLine($"{book.Id} - {book.Title} - {book.Author} - {book.ISBN} - {book.AvailabilityStatus}");
         }
     }
 }

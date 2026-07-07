@@ -69,11 +69,13 @@
         public bool ReturnBook(int memberId, int bookId)
         {
             BorrowRecord? record = borrowRecords.FirstOrDefault(r =>
-                r.Member.Id == memberId &&
-                r.Book.Id == bookId &&
+                r?.Member?.Id == memberId &&
+                r?.Book?.Id == bookId &&
                 !r.IsReturned);
 
             if (record == null)
+                return false;
+            if (record.Book == null)
                 return false;
 
             record.IsReturned = true;

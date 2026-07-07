@@ -35,9 +35,8 @@ namespace LibrarySystem
     public class EBook : Book
     {
         public override int BorrowingDays => 7;
+
     }
 
-
-}
 
 }
