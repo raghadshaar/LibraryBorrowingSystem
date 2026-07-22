@@ -8,6 +8,7 @@
             SeedBooks();
             BookService bookService = new BookService(library);
             var memberService = new MemberService(library);
+            var borrowingService = new BorrowingService(library);
             bool running = true;
 
             while (running)
@@ -41,11 +42,11 @@
                         break;
 
                     case "4":
-                        BorrowBook();
+                        borrowingService.BorrowBook();
                         break;
 
                     case "5":
-                        ReturnBook();
+                        borrowingService.ReturnBook();
                         break;
 
                     case "6":
@@ -53,7 +54,7 @@
                         break;
 
                     case "7":
-                        ViewBorrowRecords();
+                        borrowingService.ViewBorrowRecords();
                         break;
 
                     case "8":
@@ -81,81 +82,7 @@
             library.AddBook(new EBook { Id = 5, Title = "Introduction to Algorithms", Author = "Thomas H. Cormen", ISBN = "9780262046305", AvailabilityStatus = AvailabilityStatus.Available });
         }
 
-        static void BorrowBook()
-        {
-            Console.Write("Enter member id: ");
-            int memberId;
-
-
-            bool isTrue = int.TryParse(Console.ReadLine()!, out memberId);
-            if (!isTrue)
-            {
-                Console.Write("Invlaid member Id");
-                return;
-            }
-
-            Console.Write("Enter book id: ");
-            int bookId;
-
-            bool isValid = int.TryParse(Console.ReadLine()!, out bookId);
-            if (!isValid)
-            {
-                Console.Write("Invalid book Id");
-                return;
-            }
-            bool result = library.BorrowBook(memberId, bookId);
-
-            Console.WriteLine(result
-                ? "Book borrowed successfully."
-                : "Borrow failed. Check member id, book id, or availability.");
-        }
-
-        static void ReturnBook()
-        {
-            Console.Write("Enter member id: ");
-            int memberId;
-
-
-            bool isTrue = int.TryParse(Console.ReadLine()!, out memberId);
-            if (!isTrue)
-            {
-                Console.Write("Invlaid member Id");
-                return;
-            }
-
-            Console.Write("Enter book id: ");
-            int bookId;
-
-            bool isValid = int.TryParse(Console.ReadLine()!, out bookId);
-            if (!isValid)
-            {
-                Console.Write("Invalid book Id");
-                return;
-            }
-
-            bool result = library.ReturnBook(memberId, bookId);
-
-            Console.WriteLine(result
-                ? "Book returned successfully."
-                : "Return failed. No active borrow record found.");
-        }
-
-        static void ViewBorrowRecords()
-        {
-            var records = library.GetBorrowRecords();
-
-            if (!records.Any())
-            {
-                Console.WriteLine("No borrow records.");
-                return;
-            }
-
-            foreach (var record in records)
-            {
-                Console.WriteLine($"{record.Member?.Name} borrowed {record.Book?.Title} | Due: {record.DueDate:d} | Returned: {record.IsReturned}");
-            }
-        }
-        
+      
         
     }
       
