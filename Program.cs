@@ -3,10 +3,10 @@
     internal class Program
     {
         static Library library = new Library();
-
         static void Main(string[] args)
         {
             SeedBooks();
+            BookService bookService = new BookService(library);
 
             bool running = true;
 
@@ -29,11 +29,11 @@
                 switch (choice)
                 {
                     case "1":
-                        AddBook(true);
+                        bookService.AddEBook();
                         break;
 
                     case "2":
-                        AddBook(false);
+                        bookService.AddPhysicalBook();
                         break;
 
                     case "3":
@@ -49,7 +49,7 @@
                         break;
 
                     case "6":
-                        ViewAvailableBooks();
+                        bookService.ViewAvailableBooks();
                         break;
 
                     case "7":
@@ -57,7 +57,7 @@
                         break;
 
                     case "8":
-                        SearchBooks();
+                        bookService.SearchBooks();
                         break;
 
                     case "9":
@@ -81,38 +81,7 @@
             library.AddBook(new EBook { Id = 5, Title = "Introduction to Algorithms", Author = "Thomas H. Cormen", ISBN = "9780262046305", AvailabilityStatus = AvailabilityStatus.Available });
         }
 
-        static void AddBook(bool isPhysical)
-        {
-            Console.Write("Enter id: ");
-
-            int id;
-            bool isTrue = int.TryParse(Console.ReadLine()!, out id);
-            if (!isTrue)
-            {
-                Console.Write("Book Id must be integer");
-                return;
-            }
-            Console.Write("Enter title: ");
-            string? title = Console.ReadLine();
-
-            Console.Write("Enter author: ");
-            string? author = Console.ReadLine();
-
-            Console.Write("Enter ISBN: ");
-            string? isbn = Console.ReadLine();
-
-            Book book = isPhysical ? new PhysicalBook() : new EBook();
-
-            book.Id = id;
-            book.Title = title;
-            book.Author = author;
-            book.ISBN = isbn;
-            book.AvailabilityStatus = AvailabilityStatus.Available;
-
-            library.AddBook(book);
-
-            Console.WriteLine("Book added.");
-        }
+        
 
         static void RegisterMember()
         {
@@ -202,22 +171,6 @@
                 : "Return failed. No active borrow record found.");
         }
 
-        static void ViewAvailableBooks()
-        {
-            var books = library.GetAvailableBooks();
-
-            if (!books.Any())
-            {
-                Console.WriteLine("No available books.");
-                return;
-            }
-
-            foreach (var book in books)
-            {
-                Console.WriteLine($"{book.Id} - {book.Title} - {book.Author} - {book.AvailabilityStatus}");
-            }
-        }
-
         static void ViewBorrowRecords()
         {
             var records = library.GetBorrowRecords();
@@ -233,70 +186,8 @@
                 Console.WriteLine($"{record.Member?.Name} borrowed {record.Book?.Title} | Due: {record.DueDate:d} | Returned: {record.IsReturned}");
             }
         }
-        static void SearchBooks()
-        {
-            Console.WriteLine("\n===== Search Books =====");
-            Console.WriteLine("1 - Search by Title");
-            Console.WriteLine("2 - Search by Author");
-            Console.WriteLine("3 - Search by ISBN");
-            Console.Write("Choose option: ");
-
-            string? choice = Console.ReadLine();
-            string emptyMessage = "No books found.";
-            switch (choice)
-            {
-                case "1":
-                    Console.Write("Enter title: ");
-                    string? title = Console.ReadLine();
-
-                    if (string.IsNullOrWhiteSpace(title))
-                    {
-                        Console.WriteLine("Title cannot be empty.");
-                        return;
-                    }
-
-                    var booksByTitle = library.SearchByTitle(title);
-                    ConsolePrinter.PrintBooks(booksByTitle, emptyMessage);
-                    break;
-
-                case "2":
-                    Console.Write("Enter author: ");
-                    string? author = Console.ReadLine();
-
-                    if (string.IsNullOrWhiteSpace(author))
-                    {
-                        Console.WriteLine("Author cannot be empty.");
-                        return;
-                    }
-
-                    var booksByAuthor = library.SearchByAuthor(author);
-                    ConsolePrinter.PrintBooks(booksByAuthor, emptyMessage);
-                    break;
-
-                case "3":
-                    Console.Write("Enter ISBN: ");
-                    string? isbn = Console.ReadLine();
-
-                    if (string.IsNullOrWhiteSpace(isbn))
-                    {
-                        Console.WriteLine("ISBN cannot be empty.");
-                        return;
-                    }
-
-                    Book? book = library.SearchByISBN(isbn);
-
-                    if (book == null)
-                        Console.WriteLine("No book found.");
-                    else
-                        ConsolePrinter.PrintBook(book);
-
-                    break;
-
-                default:
-                    Console.WriteLine("Invalid search option.");
-                    break;
-            }
-        }
+        
+        
     }
       
 }
