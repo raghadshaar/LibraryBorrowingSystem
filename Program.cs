@@ -119,7 +119,7 @@
             Console.Write("Enter member id: ");
 
             int id;
-          bool isTrue = int.TryParse(Console.ReadLine()!,out  id);
+            bool isTrue = int.TryParse(Console.ReadLine()!, out id);
             if (!isTrue)
             {
                 Console.Write("Your member Id must be integer");
@@ -148,7 +148,7 @@
             Console.Write("Enter member id: ");
             int memberId;
 
-       
+
             bool isTrue = int.TryParse(Console.ReadLine()!, out memberId);
             if (!isTrue)
             {
@@ -242,7 +242,7 @@
             Console.Write("Choose option: ");
 
             string? choice = Console.ReadLine();
-
+            string emptyMessage = "No books found.";
             switch (choice)
             {
                 case "1":
@@ -256,7 +256,7 @@
                     }
 
                     var booksByTitle = library.SearchByTitle(title);
-                    PrintBooks(booksByTitle);
+                    ConsolePrinter.PrintBooks(booksByTitle, emptyMessage);
                     break;
 
                 case "2":
@@ -270,7 +270,7 @@
                     }
 
                     var booksByAuthor = library.SearchByAuthor(author);
-                    PrintBooks(booksByAuthor);
+                    ConsolePrinter.PrintBooks(booksByAuthor, emptyMessage);
                     break;
 
                 case "3":
@@ -288,7 +288,7 @@
                     if (book == null)
                         Console.WriteLine("No book found.");
                     else
-                        PrintBook(book);
+                        ConsolePrinter.PrintBook(book);
 
                     break;
 
@@ -297,23 +297,6 @@
                     break;
             }
         }
-        static void PrintBooks(List<Book> books)
-        {
-            if (!books.Any())
-            {
-                Console.WriteLine("No books found.");
-                return;
-            }
-
-            foreach (var book in books)
-            {
-                PrintBook(book);
-            }
-        }
-
-        static void PrintBook(Book book)
-        {
-            Console.WriteLine($"{book.Id} - {book.Title} - {book.Author} - {book.ISBN} - {book.AvailabilityStatus}");
-        }
     }
+      
 }
