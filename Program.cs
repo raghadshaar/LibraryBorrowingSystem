@@ -7,7 +7,7 @@
         {
             SeedBooks();
             BookService bookService = new BookService(library);
-
+            var memberService = new MemberService(library);
             bool running = true;
 
             while (running)
@@ -37,7 +37,7 @@
                         break;
 
                     case "3":
-                        RegisterMember();
+                        memberService.RegisterMember();
                         break;
 
                     case "4":
@@ -79,37 +79,6 @@
             library.AddBook(new EBook { Id = 3, Title = "The Pragmatic Programmer", Author = "Andrew Hunt", ISBN = "9780135957059", AvailabilityStatus = AvailabilityStatus.Available });
             library.AddBook(new PhysicalBook { Id = 4, Title = "Refactoring", Author = "Martin Fowler", ISBN = "9780134757599", AvailabilityStatus = AvailabilityStatus.Available });
             library.AddBook(new EBook { Id = 5, Title = "Introduction to Algorithms", Author = "Thomas H. Cormen", ISBN = "9780262046305", AvailabilityStatus = AvailabilityStatus.Available });
-        }
-
-        
-
-        static void RegisterMember()
-        {
-            Console.Write("Enter member id: ");
-
-            int id;
-            bool isTrue = int.TryParse(Console.ReadLine()!, out id);
-            if (!isTrue)
-            {
-                Console.Write("Your member Id must be integer");
-                return;
-            }
-            Console.Write("Enter name: ");
-            string? name = Console.ReadLine();
-
-            Console.Write("Enter email: ");
-            string? email = Console.ReadLine();
-
-            Member member = new Member
-            {
-                Id = id,
-                Name = name,
-                Email = email
-            };
-
-            library.RegisterMember(member);
-
-            Console.WriteLine("Member registered.");
         }
 
         static void BorrowBook()
