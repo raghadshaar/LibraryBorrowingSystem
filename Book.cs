@@ -16,7 +16,6 @@ namespace LibrarySystem
         public AvailabilityStatus AvailabilityStatus { get; set; }
         public abstract int BorrowingDays { get; }
 
-
     }
 
     public enum AvailabilityStatus
@@ -35,8 +34,5 @@ namespace LibrarySystem
     public class EBook : Book
     {
         public override int BorrowingDays => 7;
-
     }
-
-
 }

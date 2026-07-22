@@ -2,27 +2,35 @@
 {
     public class Library
     {
-        private readonly List<Book> books = new();
+        private readonly List<Book> _books = new();
         private readonly MemberRepository memberRepository = new();
         private readonly List<BorrowRecord> borrowRecords = new();
 
-        public void AddBook(Book book)
+        public bool AddBook(Book book)
         {
-            if (book != null && !books.Any(b => b.Id == book.Id))
-                books.Add(book);
+            bool bookIdAlreadyExists =
+                _books.Any(existingBook => existingBook.Id == book.Id);
+
+            if (bookIdAlreadyExists)
+            {
+                return false;
+            }
+
+            _books.Add(book);
+            return true;
         }
 
         public void RemoveBook(int id)
         {
-            Book? book = books.FirstOrDefault(b => b.Id == id);
+            Book? book = _books.FirstOrDefault(b => b.Id == id);
 
             if (book != null)
-                books.Remove(book);
+                _books.Remove(book);
         }
 
         public IReadOnlyList<Book> GetAvailableBooks()
         {
-            return books
+            return _books
                 .Where(b => b.AvailabilityStatus == AvailabilityStatus.Available)
                 .ToList();
         }
@@ -42,7 +50,7 @@
             Member? member = memberRepository.GetMembers()
                 .FirstOrDefault(m => m.Id == memberId);
 
-            Book? book = books.FirstOrDefault(b => b.Id == bookId);
+            Book? book = _books.FirstOrDefault(b => b.Id == bookId);
 
             if (member == null || book == null)
                 return false;
@@ -88,28 +96,25 @@
         {
             return borrowRecords;
         }
-        //
-        //
-      
+
         public List<Book> SearchByTitle(string title)
         {
-            return books
+            return _books
                 .Where(b => b.Title != null &&
                             b.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
         public List<Book> SearchByAuthor(string author)
         {
-            return books
+            return _books
                 .Where(b => b.Author != null &&
                             b.Author.Contains(author, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
         public Book? SearchByISBN(string isbn)
         {
-            return books.FirstOrDefault(b => b.ISBN == isbn);
+            return _books.FirstOrDefault(b => b.ISBN == isbn);
         }
-       
 
     }
 }

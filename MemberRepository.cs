@@ -8,22 +8,19 @@ namespace LibrarySystem
 {
     public class MemberRepository
     {
-
         private List<Member> members = new List<Member>();
-
-
         public void AddMember(Member member)
         {
 
-            Member? mem = members.FirstOrDefault(m => m.Id == member.Id);
-            if (mem is null) members.Add(member);
+            Member? newMember = members.FirstOrDefault(m => m.Id == member.Id);
+            if (newMember is null) members.Add(member);
         }
         public void RemoveMember(Member member)
         {
-            Member? mem = members.FirstOrDefault(m => m.Id == member.Id);
-            if (mem != null)
+            Member? newMember = members.FirstOrDefault(m => m.Id == member.Id);
+            if (newMember != null)
             {
-                members.Remove(mem);
+                members.Remove(newMember);
             }
 
         }

@@ -10,7 +10,6 @@ A C# Console Application that simulates a simple library borrowing system. The a
 
 - Add Physical Books
 - Add EBooks
-- Remove Books
 - View Available Books
 - Search Books by:
   - Title
@@ -69,6 +68,13 @@ The application continues running until the user chooses to exit.
 ```text
 LibrarySystem/
 │
+├── Services/
+│   ├── BookService.cs
+│   ├── BorrowingService.cs
+│   ├── ConsolePrinter.cs
+│   ├── LibrarySeeder.cs
+│   └── MemberService.cs
+│
 ├── Book.cs
 ├── BorrowRecord.cs
 ├── Library.cs
@@ -80,6 +86,18 @@ LibrarySystem/
 ```
 
 ---
+
+## Code Organization
+
+The project separates related responsibilities into service classes:
+
+- `BookService` handles adding, displaying, and searching for books.
+- `MemberService` handles member registration.
+- `BorrowingService` handles borrowing, returning, and viewing borrowing records.
+- `ConsolePrinter` handles formatted console output.
+- `LibrarySeeder` adds the initial sample books.
+- `Library` contains the main library business logic.
+- `Program` creates the required objects, displays the menu, and directs each option to the appropriate service.
 
 ## Technologies Used
 

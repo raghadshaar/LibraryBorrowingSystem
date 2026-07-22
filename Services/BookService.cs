@@ -1,4 +1,4 @@
-﻿namespace LibrarySystem;
+﻿namespace LibrarySystem.services;
 
 public class BookService
 {
@@ -45,14 +45,17 @@ public class BookService
         book.AvailabilityStatus =
             AvailabilityStatus.Available;
 
-        _library.AddBook(book);
+        bool isAdded = _library.AddBook(book);
 
-        Console.WriteLine("Book added successfully.");
+        Console.WriteLine(
+            isAdded
+                ? "Book added successfully."
+                : $"A book with ID {book.Id} already exists.");
     }
 
     public void ViewAvailableBooks()
     {
-       IReadOnlyList<Book> books = _library.GetAvailableBooks();
+        IReadOnlyList<Book> books = _library.GetAvailableBooks();
 
         ConsolePrinter.PrintBooks(
             books,

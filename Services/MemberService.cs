@@ -1,4 +1,4 @@
-﻿namespace LibrarySystem;
+﻿namespace LibrarySystem.services;
 
 public class MemberService
 {
